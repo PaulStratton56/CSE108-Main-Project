@@ -4,6 +4,12 @@ app = Flask(__name__)
 
 DEFAULT_USER = "Paul"
 
+'''
+================================================================
+                          Page Routes                           
+================================================================
+'''  
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -31,6 +37,14 @@ def create(userID):
 @app.route("/board/<userID>/<boardID>")
 def board(userID, boardID):
     return render_template("board.html", username = DEFAULT_USER, boardname = "DefaultBoard")
+
+'''
+================================================================
+                          Backend Routes                           
+================================================================
+''' 
+
+
 
 if __name__ == "__main__":
     app.run()
