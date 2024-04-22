@@ -15,7 +15,36 @@
         <a href="{{ url_for('index') }}">Log Out</a>
     </div>
     
-    User Home page.
-    Hi, {{ username }}!
+    <h1>Welcome {{username}}!</h1>
+
+    <div>
+        <table>
+            <th>what are we doing today?</th>
+            <tr>
+                <button>View my Boards</button>
+            </tr>
+            <tr>
+                <button>Join a Board</button>
+            </tr>
+            <tr>
+                <button>Make a Board</button>
+            </tr>
+            <tr>
+                <button>Log Out</button>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <h1>Quick Boards:</h1>
+        <p>Cool board <button>Open!</button></p>
+        <p> > Last Opened: today</p>
+        <ul>
+            <li>Collaborators:</li>
+            <li>Jet</li>
+            <li>Lin</li>
+        </ul>
+    </div>
+
 </body>
 </html>
