@@ -1,0 +1,66 @@
+.App {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #ee0101;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.Logo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 200px;
+    height: 200px;
+}
+
+.container1 {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+.UC-Merced {
+    color: #00205b;
+    margin-bottom: 0.5em;
+}
+
+.singleLog {
+    color: #000;
+    margin-bottom: 1em;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+button {
+    background-color: #00205b;
+    color: #fff;
+    border: none;
+    padding: 10px;
+    width: calc(100% - 20px); /* Fit to container minus padding */
+}
+
+#showPass{
+    margin-right: 0px;
+}
+
+#Not-member{
+    color: #00205b;
+    margin-top: 1em;
+}
