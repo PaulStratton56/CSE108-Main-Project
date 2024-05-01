@@ -1,20 +1,28 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
-
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///playersviewer.db'
 DEFAULT_USER = "Paul"
 
 db = SQLAlchemy(app)
-
+app.secret_key = 'secreteKey'
 class Players(UserMixin, db.Model):
     __tablename__ = "Players"
-    id          = db.Column(db.Integer, primary_key = True)
+    id          = db.Column(db.Integer, primary_key = True, autoincrement=True)
     playerName  = db.Column(db.String, nullable=False)
-    boardID     = db.Column(db.Integer, primary_key = True)
+    playerPassword  = db.Column(db.String, nullable=False)
+    # boardID     = db.Column(db.Integer, primary_key = True)
     boardName   = db.Column(db.String, nullable=False)
+
+    def set_password(self, password):
+        self.playerPassword = generate_password_hash(password)
+
+    def check_password(self, password):
+        return check_password_hash(self.playerPassword, password)
+
 '''
 ================================================================
                           Page Routes                           

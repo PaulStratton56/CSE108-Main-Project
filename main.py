@@ -17,11 +17,30 @@ def index():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    return render_template("Login.html")
+    if request.method == "GET":
+        return render_template("Login.html")
 
-@app.route("/signup")
+
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
-    return render_template("signUp.html")
+    if request.method == "GET":
+        return render_template("signUp.html")
+    elif request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        
+        new_player = Players(playerName=username, boardName=DEFAULT_USER)
+        
+        
+        new_player.set_password(password)
+
+        db.session.add(new_player)
+        db.session.commit()
+
+        login_user(new_player)
+        
+        return redirect(url_for("home", userID=new_player.id))
+        
 
 @app.route("/home/<userID>")
 def home(userID):
