@@ -4,6 +4,9 @@ app = Flask(__name__)
 
 DEFAULT_USER = "Paul"
 
+
+# HI THIS IS OLD 
+
 '''
 ================================================================
                           Page Routes                           

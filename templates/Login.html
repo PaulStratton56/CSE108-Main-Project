@@ -10,11 +10,16 @@
     <div class="container1">
         <h1 class="UC-Merced">Super Sketch</h1>
         <h2 class="singleLog">Login</h2>
-        <input type="text" name="username" placeholder="Username">
-        <input id="inputPass" name="password" type="password" placeholder="Password">
-        <button type="submit">Login</button>
+        <form action="{{ url_for("login") }}" method="post">
+            <input type="text" name="username" placeholder="Username">
+            <input id="inputPass" name="password" type="password" placeholder="Password">
+            <button type="submit">Login</button>
+        </form>
         <input type="checkbox" id="showPass"> Show Password
         <p id="Not-member"> Not a member ? <a href="/signup">Sign up here</a> </p>
+        {% if message != None %}
+        <div style="color: {{ messageColor }}"> {{ message }}</div>
+        {% endif %}
     </div>
 </div>
 </body>

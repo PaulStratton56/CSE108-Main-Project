@@ -2,6 +2,10 @@ from flask import Flask, render_template, request, redirect, url_for
 from models import *
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
+CONFIRM_COLOR = "green"
+ERROR_COLOR = "red"
+NONE_COLOR = "black"
+
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
@@ -19,7 +23,27 @@ def index():
 def login():
     if request.method == "GET":
         return render_template("Login.html")
+    if request.method == "POST":
+        username = request.form.get('username')
+        password = request.form.get('password')
 
+        user = Players.query.filter_by(playerName=username).first()
+
+        if user and user.check_password(password):
+            login_user(user)
+            message = None
+            messageColor = NONE_COLOR
+            if isinstance(user, Players):
+                message="Welcome, player " + user.playerName + "!"
+                messageColor = CONFIRM_COLOR
+                return redirect(url_for('home', userID=user.id))
+            else:
+                message = "ERROR: Incorrect username or password. Please try again."
+                messageColor = ERROR_COLOR
+        else:
+            message="ERROR: No user found by the name of " + username + ". Please try again."
+            messageColor = ERROR_COLOR
+        return render_template("Login.html", message = message, messageColor = messageColor)
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -44,8 +68,8 @@ def signup():
 
 @app.route("/home/<userID>")
 def home(userID):
-    return render_template("homeView.html", username = DEFAULT_USER)
-
+    return render_template("homeView.html", username = "test boy")
+    
 @app.route("/myboards/<userID>")
 def myboards(userID):
     return render_template("myboards.html", username = DEFAULT_USER)
