@@ -12,7 +12,7 @@ DEFAULT_USER = "Paul"
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("homeView.html")
 
 @app.route("/signup")
 def signup():
