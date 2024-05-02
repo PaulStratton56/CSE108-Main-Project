@@ -12,7 +12,7 @@ login_manager.login_view = 'login'
 
 @login_manager.user_loader
 def load_user(user_id):
-    return Players.query.get(user_id)
+    return User.query.get(user_id)
 
 
 @app.route("/")
@@ -27,14 +27,14 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        user = Players.query.filter_by(playerName=username).first()
+        user = User.query.filter_by(username=username).first()
 
         if user and user.check_password(password):
             login_user(user)
             message = None
             messageColor = NONE_COLOR
-            if isinstance(user, Players):
-                message="Welcome, player " + user.playerName + "!"
+            if isinstance(user, User):
+                message="Welcome, player " + User.name + "!"
                 messageColor = CONFIRM_COLOR
                 return redirect(url_for('home', userID=user.id))
             else:
@@ -51,24 +51,25 @@ def signup():
         return render_template("signUp.html")
     elif request.method == "POST":
         username = request.form.get("username")
+        name = request.form.get("name")
         password = request.form.get("password")
         
-        new_player = Players(playerName=username, boardName=DEFAULT_USER)
+        new_user = User(name=name, username=username, password=password)
         
         
-        new_player.set_password(password)
+        new_user.set_password(password)
 
-        db.session.add(new_player)
+        db.session.add(new_user)
         db.session.commit()
 
-        login_user(new_player)
+        login_user(new_user)
         
-        return redirect(url_for("home", userID=new_player.id))
+        return redirect(url_for("home", userID=new_user.id))
         
 
 @app.route("/home/<userID>")
 def home(userID):
-    return render_template("homeView.html", username = "test boy")
+    return render_template("homeView.html", username = User.username)
     
 @app.route("/myboards/<userID>")
 def myboards(userID):

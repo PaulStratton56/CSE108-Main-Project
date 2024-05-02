@@ -9,19 +9,35 @@ DEFAULT_USER = "Paul"
 
 db = SQLAlchemy(app)
 app.secret_key = 'secreteKey'
-class Players(UserMixin, db.Model):
-    __tablename__ = "Players"
+class User(UserMixin, db.Model):
+    __tablename__ = "User"
     id          = db.Column(db.Integer, primary_key = True, autoincrement=True)
-    playerName  = db.Column(db.String, nullable=False)
-    playerPassword  = db.Column(db.String, nullable=False)
-    # boardID     = db.Column(db.Integer, primary_key = True)
-    boardName   = db.Column(db.String, nullable=False)
+    name        = db.Column(db.String, nullable=False)
+    username    = db.Column(db.String, nullable=False)
+    password    = db.Column(db.String, nullable=False)
 
     def set_password(self, password):
-        self.playerPassword = generate_password_hash(password)
+        self.password = generate_password_hash(password)
 
     def check_password(self, password):
-        return check_password_hash(self.playerPassword, password)
+        return check_password_hash(self.password, password)
+
+class Board(db.Model):
+    __tablename__ = "Board"
+    id          = db.Column(db.Integer, primary_key = True, autoincrement=True)
+    name        = db.Column(db.String, nullable=False)
+    data        = db.Column(db.String, nullable=False)
+    owner_id    = db.Column(db.String, db.ForeignKey("User.id"))
+    owner        = db.relationship("User", backref=db.backref("boards", lazy=True))
+
+class UserBoardAssociation(db.Model):
+    __tablename__ = "UserBoardAssociation"
+    id          = db.Column(db.Integer, primary_key = True, autoincrement=True)
+    board_id    = db.Column(db.ForeignKey("Board.id"))
+    board        = db.relationship("Board", backref=db.backref("userboardassociation", lazy=True))
+    user_id    = db.Column(db.String, db.ForeignKey("User.id"))
+    user        = db.relationship("User", backref=db.backref("userboardassociation", lazy=True))
+
 
 '''
 ================================================================
