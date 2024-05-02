@@ -1,8 +1,7 @@
-from flask import Flask, render_template
+from flask import render_template, redirect, url_for
+from models import *
 
-app = Flask(__name__)
-
-DEFAULT_USER = "Paul"
+DEFAULT_USER = "John Smith"
 
 '''
 ================================================================
@@ -44,7 +43,15 @@ def board(userID, boardID):
 ================================================================
 ''' 
 
+@app.route('/debug')
+def debug():
+    
+    print("Debug Complete.")
+    return redirect(url_for('index'))
 
+
+with app.app_context():
+    db.create_all()
 
 if __name__ == "__main__":
     app.run()
