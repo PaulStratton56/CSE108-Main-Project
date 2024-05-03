@@ -69,7 +69,7 @@ def signup():
 
 @app.route("/home/<userID>")
 def home(userID):
-    return render_template("homeView.html", username = User.username)
+    return render_template("homeView.html", username = DEFAULT_USER)
     
 @app.route("/myboards/<userID>")
 def myboards(userID):
