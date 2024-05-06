@@ -12,18 +12,22 @@
     <button class="tablink" onclick="toggle('MyBoards', this)">My Boards</button>
     <button class="tablink" onclick="toggle('JoinBoard', this)">Join a Board</button>
     <button class="tablink" onclick="toggle('CreateBoard', this)">Create a Board</button>
-    <button class="tablink" onclick="toggle('Logout', this)">Log Out</button>
+    <form action="{{ url_for('logout', userID = userID )}}" method="GET">
+        <button class="tablink" type="submit">Log Out</button>
+    </form>
 </div>
 
 <div id="Home" class="tabcontent active">
     <div class="welcome-section">
-        <h2>Welcome, <span class="user-placeholder">User</span>!</h2>
+        <h2>Welcome, {{ name }}!</h2>
         <p>What are we doing today?</p>
         <div class="action-buttons">
             <button class="home-button" onClick="toggle('MyBoards')"><i class="fas fa-paint-brush"></i> View my Boards</button>
             <button class="home-button" onClick="toggle('JoinBoard')"><i class="fas fa-plus"></i> Join a Board</button>
             <button class="home-button" onClick ="toggle('CreateBoard')"><i class="fas fa-chalkboard-teacher"></i> Create a Board</button>
-            <button class="home-button" ><i class="fas fa-sign-out-alt"></i> Log Out</button> <!--log out button-->
+            <form action="{{ url_for('logout', userID = userID )}}" method="GET">
+                <button class="home-button" type="submit"><i class="fas fa-sign-out-alt"></i> Log Out</button> <!--log out button-->
+            </form>
         </div>
     </div>
     <div class="board-suggestions">
@@ -76,51 +80,26 @@
     <h2>Let's Make a New Board!</h2>
     <div>
         <label for="boardName">What should we call it?</label>
-        <input type="text" id="boardName" placeholder="Legendary name goes here..." required>
+        <input type="text" id="boardName" placeholder="Legendary name goes here...">
 
         <label for="collaborator">Who else gets to work on it?</label>
         <input type="text" id="collaborator" placeholder="Put their username here!">
         <button type="button" id = "add-them" onclick="addCollaborator()">Add them!</button>
+
         <div id = "collaboratorsListCon">
-        <p><b>Collaborators:</b></p>
-        <div id="collaboratorsList" class="collaborators">
-            <p>User1</p>
-            <p>User2</p>
-            <p>User3</p>
-            <p>User4</p>
-        </div>
+            <p><b>Collaborators:</b></p>
+            <table id="collaboratorsList" class="collaborators">
+                <tr>
+                    <th>Username</th>
+                    <th>Name</th>
+                </tr>
+            </table>
         </div>
 
-        <button type="button" class="big-action-button">DO IT!</button>
+        <button type="button" class="big-action-button" onclick="createBoard(ownerID = '{{userID}}')">DO IT!</button>
     </div>
 </div>
 
-
-
-
-
-<script>
-    function toggle(selectedPage) {
-        const contents = document.querySelectorAll('.tabcontent');
-        contents.forEach(content => content.style.display = 'none');
-        const links = document.querySelectorAll('.tablink');
-        links.forEach(link => link.classList.remove('active'));
-        document.getElementById(selectedPage).style.display = 'block';
-        event.currentTarget.classList.add('active');
-    }
-    document.querySelector('#defaultOpen').click();
-
-    function addCollaborator() {
-        let collaborator = document.getElementById('collaborator').value;
-        let collaboratorList = document.getElementById('collaboratorsList');
-        let newCollaborator = document.createElement('p');
-        newCollaborator.textContent = collaborator;
-        collaboratorList.appendChild(newCollaborator);
-    }
-
-
-
-</script>
-
+<script src="../static/homeView.js"></script>
 </body>
 </html>

@@ -6,15 +6,17 @@
 </head>
 <body>
 <div class="App">
-    <img src="Logo.png" class="Logo" alt="Logo Picture">
+    <img src="../static/super_sketch.png" class="Logo" alt="Logo Picture">
     <div class="container1">
         <h1 class="UC-Merced">Super Sketch</h1>
         <h2 class="singleLog">Login</h2>
-        <input type="text" name="username" placeholder="Username">
-        <input id="inputPass" name="password" type="password" placeholder="Password">
-        <button type="submit">Login</button>
+        <form action="{{ url_for('loginPage') }}" method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input id="inputPass" name="password" type="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
         <input type="checkbox" id="showPass"> Show Password
-        <p id="Not-member"> Not a member ? <a href="SignUp.html">Sign up here</a> </p>
+        <p id="Not-member"> Not a member ? <a href="{{ url_for('signup') }}">Sign up here</a> </p>
     </div>
 </div>
 </body>

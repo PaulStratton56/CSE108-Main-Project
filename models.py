@@ -2,7 +2,11 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, BLOB, ForeignKey, Integer
 from sqlalchemy.orm import relationship
+import hashlib
+import random
 
+SALT_CHARACTERS = "abcdefghijklmnopqrstuvwxyz1234567890!@#%^&*"
+SALT_LENGTH = 8
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///boards.db'
@@ -16,21 +20,49 @@ class Artist(db.Model):
     password = Column(String, nullable=False)
     
     def __init__(self, name, username, password):
+        print("Creating a new artist...")
         self.name = name
         self.username = username
-        self.password = password
+
+        salt = ''.join(random.choice(SALT_CHARACTERS) for i in range(SALT_LENGTH))
+
+        saltedPassword = password + salt
+
+        sha256 = hashlib.sha256()
+        sha256.update(saltedPassword.encode())
+        hashedPassword = sha256.digest()
+
+        storedPassword = salt + "$" + str(hashedPassword)
+
+        self.password = storedPassword
+
+    def passwordIsValid(self, password):
+        salt = self.password.split("$", 1)[0]
+        passwordHash = self.password.split("$", 1)[1]
+
+        saltedPassword = password + salt
+
+        sha256 = hashlib.sha256()
+        sha256.update(saltedPassword.encode())
+        hashedPassword = sha256.digest()
+
+        if str(hashedPassword) == str(passwordHash):
+            return True
+        return False
+
+
 
 class Board(db.Model):
     __tablename__ = 'Board'
     board_id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    boardValues = Column(BLOB, nullable=False)
+    boardData = Column(BLOB, nullable=False)
     owner_id = Column(Integer, ForeignKey('Artist.user_id'), nullable=False)
     owner = relationship(Artist, backref=db.backref('Boards', lazy=True))
 
-    def __init__(self, name, boardValues, owner):
+    def __init__(self, name, boardData, owner):
         self.name = name
-        self.boardValues = boardValues
+        self.boardData = boardData
         self.owner_id = owner.user_id
         self.owner = owner
 
