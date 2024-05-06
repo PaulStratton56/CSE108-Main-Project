@@ -37,6 +37,10 @@ def create(userID):
 def board(userID, boardID):
     return render_template("board.html", username = DEFAULT_USER, boardname = "DefaultBoard")
 
+@app.route("/board")
+def boardonly():
+    return render_template("board.html")
+
 '''
 ================================================================
                           Backend Routes                           
