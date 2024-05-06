@@ -68,10 +68,12 @@
 <div id="JoinBoard" class="tabcontent">
     <h1 id = "h1">You've Been Invited!</h1>
     <p class="centerJoin" id="boardC">Got a Board Code?</p>
-    <input type="text" id="board-input" name="board-id">
-    <div class="buttons-container">
-        <button type="submit">Let me in!</button>
-    </div>
+    <form action="{{ url_for('joinBoard', userID = userID) }}" method="POST">
+        <input type="text" id="board-input" name="boardID">
+        <div class="buttons-container">
+            <button type="submit">Let me in!</button>
+        </div>
+    </form>
 </div>
 
 

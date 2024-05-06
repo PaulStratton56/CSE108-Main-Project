@@ -155,6 +155,24 @@ def createBoard():
 
     return responseBody
 
+@app.route('/joinBoard/<userID>', methods=["POST"])
+def joinBoard(userID):
+    boardID = request.form.get('boardID')
+
+    artist = db.session.query(Artist).filter(Artist.user_id == userID).first()
+    board = db.session.query(Board).filter(Board.board_id == boardID).first()
+
+    if artist == None or board == None:
+        return redirect(url_for('home', userID = userID))
+    
+    else:
+        association = UserBoardAssociation(user = artist, board = board)
+        db.session.add(association)
+        db.session.commit()
+
+        return redirect(url_for('board', userID = userID, boardID = boardID))
+
+
 @app.route('/debug')
 def debug():
     
