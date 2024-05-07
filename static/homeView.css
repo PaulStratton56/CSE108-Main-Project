@@ -190,7 +190,7 @@ body, html {
     border: 1px solid #ddd;
     padding: 10px;
     display: flex;
-    justify-content: space-between;
+    justify-content:space-between;
     align-items: center;
     font-family: 'Comic Sans MS', cursive, sans-serif;
 
@@ -302,8 +302,11 @@ body, html {
 #list2 th, #list2 td {
     text-align: left;
     padding: 12px;
+    text-align: center;
     /* border-bottom: 1px solid #ddd; */
 }
+
+
 
 #board-header {
     background-color: #333;
@@ -337,8 +340,26 @@ th {
     box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
     position: sticky;
     top: 0;
+    text-align: center;
 }
 
+tr {
+    vertical-align: middle;
+}
+
+#MyBoards td {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 25%;
+}
+
+#MyBoards th {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 25%;
+}
 
 #CreateBoard {
     display: none;
@@ -382,7 +403,7 @@ th {
 
 #CreateBoard .collaborators {
     margin-top: 15px;
-    padding-left: 20px;
+    width:100%;
 }
 
 #CreateBoard .collaborators p {
@@ -422,6 +443,20 @@ th {
     font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
+#collaboratorsList tr {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 50%;
+}
+
+#collaboratorsList th {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 50%;
+}
+
 .collaborators {
     margin-top: 20px;
 }
@@ -440,7 +475,11 @@ th {
     width:auto;
 }
 
-
+.boardPreview {
+    height:5rem;
+    width: auto;
+    border: 2px solid black;
+}
 
 
 

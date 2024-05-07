@@ -203,6 +203,8 @@ def myBoards(userID):
             
             boardInfo["name"] = board.name
             
+            boardInfo["boardData"] = board.boardData.decode()
+
             if board.owner == artist:
                 boardInfo["owned"] = True
             else:

@@ -107,6 +107,9 @@ function updateMyBoards(userID) {
     let collaboratorsHeader = document.createElement("th");
     collaboratorsHeader.innerText = "Collaborators";
     headerRow.appendChild(collaboratorsHeader);
+    let previewHeader = document.createElement("th");
+    previewHeader.innerText = "Preview";
+    headerRow.appendChild(previewHeader);
     let actionsHeader = document.createElement("th");
     actionsHeader.innerText = "Actions";
     headerRow.appendChild(actionsHeader);
@@ -141,9 +144,16 @@ function updateMyBoards(userID) {
                     break;
                 }
             }
-            let boardCollaboratorcell = document.createElement("td");
-            boardCollaboratorcell.innerText = collaboratorList;
-            boardRow.appendChild(boardCollaboratorcell);
+            let boardCollaboratorCell = document.createElement("td");
+            boardCollaboratorCell.innerText = collaboratorList;
+            boardRow.appendChild(boardCollaboratorCell);
+
+            let boardPreviewCell = document.createElement("td");
+            let boardPreview = document.createElement("img");
+            boardPreview.classList.add("boardPreview")
+            boardPreview.src = board["boardData"];
+            boardPreviewCell.appendChild(boardPreview);
+            boardRow.appendChild(boardPreviewCell);
 
             let boardActionsCell = document.createElement("td");
             boardRow.appendChild(boardActionsCell);
