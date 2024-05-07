@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, String, BLOB, ForeignKey, Integer
 from sqlalchemy.orm import relationship
+from flask_login import UserMixin
 import hashlib
 import random
 
@@ -10,11 +11,12 @@ SALT_LENGTH = 8
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///boards.db'
+app.secret_key = 'This key is super secret! Surely this is secure!'
 db = SQLAlchemy(app)
 
-class Artist(db.Model):
+class Artist(UserMixin, db.Model):
     __tablename__ = 'Artist'
-    user_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     username = Column(String, nullable=False)
     password = Column(String, nullable=False)
@@ -54,28 +56,28 @@ class Artist(db.Model):
 
 class Board(db.Model):
     __tablename__ = 'Board'
-    board_id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     boardData = Column(BLOB, nullable=False)
-    owner_id = Column(Integer, ForeignKey('Artist.user_id'), nullable=False)
+    owner_id = Column(Integer, ForeignKey('Artist.id'), nullable=False)
     owner = relationship(Artist, backref=db.backref('Boards', lazy=True))
 
     def __init__(self, name, boardData, owner):
         self.name = name
         self.boardData = boardData
-        self.owner_id = owner.user_id
+        self.owner_id = owner.id
         self.owner = owner
 
 class UserBoardAssociation(db.Model):
     __tablename__ = 'UserBoardAssociation'
-    association_id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('Artist.user_id'), nullable=False)
-    board_id = Column(Integer, ForeignKey('Board.board_id'), nullable=False)
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('Artist.id'), nullable=False)
+    board_id = Column(Integer, ForeignKey('Board.id'), nullable=False)
     user = relationship(Artist)
     board = relationship(Board)
 
     def __init__(self, user, board):
-        self.user_id = user.user_id
-        self.board_id = board.board_id
+        self.user_id = user.id
+        self.board_id = board.id
         self.user = user
         self.board = board
