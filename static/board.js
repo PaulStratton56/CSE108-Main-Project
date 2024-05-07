@@ -6,7 +6,6 @@ const activeToolText = document.getElementById('activeTool');
 const ctx = canvas.getContext('2d');
 
 const saveButton = document.getElementById('saveCanvas');
-const loadButton = document.getElementById('loadCanvas');
 
 const canvasOffsetX = canvas.offsetLeft;
 const canvasOffsetY = canvas.offsetTop;
@@ -72,6 +71,12 @@ toolbar.addEventListener('change', e => {
 
     if (e.target.id === 'lineWidth') {
         penWidth = e.target.value;
+
+        if(penWidth <= 0){
+            e.target.value = 1;
+            return;
+        }
+
         if (!isErasing) {
             ctx.lineWidth = penWidth;
         }
@@ -79,6 +84,12 @@ toolbar.addEventListener('change', e => {
 
     if (e.target.id === 'eraserWidth') {
         eraserWidth = e.target.value;
+
+        if(eraserWidth <= 0){
+            e.target.value = 1;
+            return;
+        }
+
         if (isErasing) {
             ctx.lineWidth = eraserWidth;
         }
@@ -157,4 +168,3 @@ const loadCanvas = () => {
 }
 
 saveButton.addEventListener('click', saveCanvas);
-loadButton.addEventListener('click', loadCanvas);

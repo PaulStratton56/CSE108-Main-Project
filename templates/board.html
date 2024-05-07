@@ -18,6 +18,8 @@
             <br><br>
             <div id="toolbar">
                 <!-- <h1>cse 108!!!</h1> -->
+                <h3>Board Code: {{boardID}}</h3> <br> <br>
+
                 <label for="stroke">Color</label>
                 <input id="stroke" name='stroke' type="color">
                 <br><br>
@@ -38,7 +40,9 @@
                 <div id="activeTool">Active Tool: Pen</div>
 
                 <button id="saveCanvas">Save Canvas</button>
-                <button id="loadCanvas">Load Canvas</button>
+                <form action="{{ url_for('home', userID = userID )}}" method="GET">
+                    <button type="submit">Back Home</button>
+                </form>
 
             </div>
         </div>
