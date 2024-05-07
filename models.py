@@ -9,18 +9,32 @@ import random
 SALT_CHARACTERS = "abcdefghijklmnopqrstuvwxyz1234567890!@#%^&*"
 SALT_LENGTH = 8
 
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///boards.db'
 app.secret_key = 'This key is super secret! Surely this is secure!'
+
+SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+    username="jetlin101",
+    password="cse108mainproject",
+    hostname="jetlin101.mysql.pythonanywhere-services.com",
+    databasename="jetlin101$mainproject1",
+)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+
 db = SQLAlchemy(app)
+
 
 class Artist(UserMixin, db.Model):
     __tablename__ = 'Artist'
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
-    username = Column(String, nullable=False)
-    password = Column(String, nullable=False)
-    
+    name = Column(String(255), nullable=False)
+    username = Column(String(255), nullable=False)
+    password = Column(String(255), nullable=False)
+
     def __init__(self, name, username, password):
         print("Creating a new artist...")
         self.name = name
@@ -57,7 +71,7 @@ class Artist(UserMixin, db.Model):
 class Board(db.Model):
     __tablename__ = 'Board'
     id = Column(Integer, primary_key=True)
-    name = Column(String, nullable=False)
+    name = Column(String(255), nullable=False)
     boardData = Column(BLOB, nullable=False)
     owner_id = Column(Integer, ForeignKey('Artist.id'), nullable=False)
     owner = relationship(Artist, backref=db.backref('Boards', lazy=True))
