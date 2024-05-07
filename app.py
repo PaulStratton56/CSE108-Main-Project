@@ -43,7 +43,7 @@ def loginPage():
             if artist.passwordIsValid(password) == True:
                 return redirect(url_for("login", userID = artist.id))
 
-    return render_template("login.html")
+    return render_template("Login.html")
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -194,7 +194,7 @@ def myBoards(userID):
     artist = db.session.query(Artist).filter(Artist.id == userID).first()
 
     if artist != None:
-        myBoards = db.session.query(Board).join(UserBoardAssociation).filter(UserBoardAssociation.id == userID).all()
+        myBoards = db.session.query(Board).join(UserBoardAssociation).filter(UserBoardAssociation.user_id == userID).all()
 
         responseBody = {}
 
