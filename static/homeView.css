@@ -2,14 +2,15 @@ body, html {
     height: 100%;
     margin: 0;
     font-family: 'Comic Sans MS', cursive, sans-serif;
+    background-image: linear-gradient(144deg, #0d0de8, #11131e);
 }
 
 .tablink-container {
     display: flex;
-    justify-content: space-between;
-    background-color: #d3d3d3;
+    justify-content: space-between;    
+    background-color: #161717;
     padding: 10px;
-    border-bottom: 1px solid #0e0e0e;
+    /* border-bottom: 1px solid #0e0e0e; */
     box-shadow: 10px 5px 5px #1c1b1b;
     font-family: 'Comic Sans MS', cursive, sans-serif;
 }
@@ -70,9 +71,8 @@ body, html {
 .tabcontent {
     display: none;
     padding: 20px;
-    border: 1px solid #ccc;
     border-top: none;
-    height: calc(100% - 48px);
+    height: calc(100vh - 10rem);
     font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
@@ -82,10 +82,26 @@ body, html {
 }
 
 .welcome-section {
-    float: left;
+    position:relative;
     width: 50%;
+    left: 25%;
     box-sizing: border-box;
     font-family: 'Comic Sans MS', cursive, sans-serif;
+    color:white;
+}
+
+.welcome-section > h2, p {
+    text-align: center;
+    animation: makeBigger 2s ease forwards;
+}
+
+@keyframes makeBigger{
+    from{
+        transform: scale(0.5)
+    }
+    to{
+        transform: scale(2)
+    }
 }
 
 .board-suggestions {
@@ -151,6 +167,7 @@ body, html {
 }
 
 .home-button:hover {
+    border: 2px solid white;
     background-image: linear-gradient(144deg, #e81414, #321414 50%, #bb07fb);
 }
 
@@ -203,6 +220,7 @@ body, html {
 
 #JoinBoard {
     border: 2px solid black;
+    border-radius: 16px;
     padding: 40px;
     width: 50%;
     height: 40%;
@@ -210,17 +228,19 @@ body, html {
     margin-left: auto;
     margin-right: auto;
     font-family: 'Comic Sans MS', cursive, sans-serif;
-    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 10px 5px 5px #0c0c0c;
+    box-shadow: 10px 5px 5px #0c0c0c;    
+    background-color: #f9f9f9;
+
 }
 
 .centerJoin {
     text-align: center;
     width: 100%;
 }
+
 
 #JoinBoard input[type="text"] {
     margin-bottom: 20px;
@@ -279,7 +299,7 @@ body, html {
 #list2 th, #list2 td {
     text-align: left;
     padding: 12px;
-    border-bottom: 1px solid #ddd;
+    /* border-bottom: 1px solid #ddd; */
 }
 
 #board-header {
@@ -319,6 +339,7 @@ th {
 
 #CreateBoard {
     display: none;
+    align-items: center;
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 12px;
@@ -327,7 +348,12 @@ th {
     max-width: 600px;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     box-shadow: 10px 5px 5px #0e0e0e;
-    height: 600px;
+}
+
+.CreateBoardContent {
+    display:flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #CreateBoard h2 {
@@ -344,7 +370,7 @@ th {
 }
 
 #CreateBoard input[type="text"] {
-    width: 100%;
+    width: 80%;
     padding: 8px;
     margin-top: 5px;
     border: 1px solid #ccc;
@@ -365,6 +391,7 @@ th {
     width: 48%;
     padding: 10px;
     margin-top: 20px;
+    margin-bottom: 2rem;
     border: none;
     border-radius: 4px;
     font-size: 16px;
@@ -375,7 +402,6 @@ th {
 #CreateBoard .big-action-button {
     background-color: #878787;
     color: white;
-    margin-left: 25%;
 }
 
 #CreateBoard .big-action-button:hover {
@@ -397,7 +423,14 @@ th {
     margin-top: 20px;
 }
 
+.board-action-button {
+    background-color: #161717;
+    color: white;
+    margin:0.5rem;
+    height:3rem;
+    border-radius: 8px;
 
+}
 
 
 
