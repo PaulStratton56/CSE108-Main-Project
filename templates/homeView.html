@@ -9,7 +9,7 @@
 
 <div class="tablink-container">
     <button class="tablink active" onclick="toggle('Home', this)">Home</button>
-    <button class="tablink" onclick="toggle('MyBoards', this)">My Boards</button>
+    <button class="tablink" onclick="toggle('MyBoards', userID = '{{userID}}', this)">My Boards</button>
     <button class="tablink" onclick="toggle('JoinBoard', this)">Join a Board</button>
     <button class="tablink" onclick="toggle('CreateBoard', this)">Create a Board</button>
     <form action="{{ url_for('logout', userID = userID )}}" method="GET">
@@ -43,14 +43,11 @@
 <div id="MyBoards" class="tabcontent my-boards">
     <h1>These are your boards!</h1>
     <table id="list2" class="board-list">
-        <thead>
         <tr id="board-header">
             <th>Boards</th>
             <th>Collaborators</th>
             <th id = "actions"> Actions</th>
         </tr>
-        </thead>
-        <tbody>
         <tr class="board-item">
            <!-- <td>
                 <button class="tablink">Open</button>
@@ -59,11 +56,8 @@
             </td>
             -->
         </tr>
-        </tbody>
     </table>
 </div>
-
-
 
 <div id="JoinBoard" class="tabcontent">
     <h1 id = "h1">You've Been Invited!</h1>

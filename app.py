@@ -4,6 +4,7 @@ from models import *
 
 DEFAULT_USER = "John Smith"
 EMPTY = "".encode()
+NO_BOARDS = {"boards" : {}}
 
 '''
 ================================================================
@@ -172,6 +173,77 @@ def joinBoard(userID):
 
         return redirect(url_for('board', userID = userID, boardID = boardID))
 
+@app.route('/myBoards/<userID>')
+def myBoards(userID):
+    artist = db.session.query(Artist).filter(Artist.user_id == userID).first()
+
+    if artist != None:
+        myBoards = db.session.query(Board).join(UserBoardAssociation).filter(UserBoardAssociation.user_id == userID).all()
+
+        responseBody = {}
+
+        for boardIndex,board in enumerate(myBoards):
+            boardInfo = {}
+            
+            boardInfo["name"] = board.name
+            
+            if board.owner == artist:
+                boardInfo["owned"] = True
+            else:
+                boardInfo["owned"] = False
+            
+            boardInfo["boardID"] = board.board_id
+
+            collaborators = db.session.query(Artist).join(UserBoardAssociation).filter(UserBoardAssociation.board == board).all()
+            collaboratorInfo = {}
+            for collaboratorIndex, collaborator in enumerate(collaborators):
+                if collaborator != artist:
+                    collaboratorInfo[collaboratorIndex] = collaborator.name
+            boardInfo["collaborators"] = collaboratorInfo
+
+            responseBody[boardIndex] = boardInfo            
+
+            
+        return responseBody
+
+    else:
+        print("Could find this user! Something went wrong.")
+        return json.dumps(NO_BOARDS)
+
+@app.route('/deleteBoard/<boardID>', methods=["DELETE"])
+def deleteBoard(boardID):
+    responseBody = {
+        "refreshList" : False
+    }
+
+    board = db.session.query(Board).filter(Board.board_id == boardID).first()
+    if board != None:
+        associations = db.session.query(UserBoardAssociation).filter(UserBoardAssociation.board == board).all()
+        for association in associations:
+            db.session.delete(association)
+        db.session.delete(board)
+        db.session.commit()
+        responseBody["refreshList"] = True
+    
+    return responseBody
+
+@app.route('/leaveBoard/<boardID>/<userID>', methods=["DELETE"])
+def leaveBoard(boardID, userID):
+    responseBody = {
+        "refreshList" : False
+    }
+
+    board = db.session.query(Board).filter(Board.board_id == boardID).first()
+    user = db.session.query(Artist).filter(Artist.user_id == userID).first()
+
+    if board != None and user != None:
+        association = db.session.query(UserBoardAssociation).filter(UserBoardAssociation.board == board, UserBoardAssociation.user == user).first()
+        if association != None:
+            db.session.delete(association)
+            db.session.commit()
+            responseBody["refreshList"] = True
+
+    return responseBody
 
 @app.route('/debug')
 def debug():
