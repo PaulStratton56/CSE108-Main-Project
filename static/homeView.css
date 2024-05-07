@@ -288,10 +288,12 @@ body, html {
     background-color: #f4f4f4;
     padding: 20px;
     border-radius: 8px;
+    overflow:auto;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     font-family: 'Comic Sans MS', cursive, sans-serif;
     margin: 20px;
     width: auto;
+    position:relative;
 }
 
 #list2 {
@@ -306,11 +308,16 @@ body, html {
     /* border-bottom: 1px solid #ddd; */
 }
 
-
+#MyBoards > h1 {
+    position: sticky;
+    top: 0; 
+}
 
 #board-header {
     background-color: #333;
     color: white;
+    position:sticky;
+    top: 0;
 }
 
 .board-item {
