@@ -1,5 +1,3 @@
-console.log('Script loaded successfully.');
-
 const canvas = document.getElementById('drawing-canvas');
 const toolbarContainer = document.getElementById('toolbar-container');
 const toggleToolbarBtn = document.getElementById('toggleToolbar');
@@ -21,6 +19,15 @@ let isErasing = false;
 let collapsed = false;
 let penWidth = 5;
 let eraserWidth = 5;
+
+var boardID;
+var userID;
+
+function startup(activeUserID, activeBoardID) {
+    boardID = activeBoardID;
+    userID = activeUserID;
+    loadCanvas();
+}
 
 toggleToolbarBtn.addEventListener('click', () => {
     toggleToolbarBtn.textContent = collapsed ? "《 " : " 》";
@@ -104,18 +111,49 @@ canvas.addEventListener('mousemove', draw);
 
 const saveCanvas = () => {
     const dataURL = canvas.toDataURL(); // Get the data URL of the canvas
-    localStorage.setItem('savedCanvas', dataURL); // Save the data URL to local storage
+    console.log("Saving board...");
+    
+    let saveCanvasRequest = new XMLHttpRequest();
+    saveCanvasRequest.open("POST", "/saveBoard", true);
+    saveCanvasRequest.setRequestHeader("Content-Type", "application/json");
+
+    let requestBody = {
+        "boardID" : boardID,
+        "boardData" : dataURL
+    }
+
+    requestBody = JSON.stringify(requestBody);
+
+    saveCanvasRequest.send(requestBody);
+
+    saveCanvasRequest.onload = function(){
+        console.log(this.responseText);
+    }
+
 }
 
 const loadCanvas = () => {
-    const savedData = localStorage.getItem('savedCanvas'); // Get the saved data URL from local storage
-    if (savedData) {
-        const img = new Image();
-        img.onload = () => {
-            ctx.drawImage(img, 0, 0); // Draw the saved image onto the canvas
+
+    console.log("Loading Board...");
+
+    let loadCanvasRequest = new XMLHttpRequest();
+    loadCanvasRequest.open("GET", '/loadBoard/' + String(boardID), true);
+    loadCanvasRequest.send();
+
+    loadCanvasRequest.onload = function(){
+        response = JSON.parse(this.responseText);
+        console.log(response);
+
+        const savedData = response["boardData"]; // Get the saved data URL from local storage
+        if (savedData) {
+            const img = new Image();
+            img.onload = () => {
+                ctx.drawImage(img, 0, 0); // Draw the saved image onto the canvas
+            }
+            img.src = savedData;
         }
-        img.src = savedData;
-    }
+    }    
+
 }
 
 saveButton.addEventListener('click', saveCanvas);

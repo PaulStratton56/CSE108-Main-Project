@@ -5,6 +5,8 @@ from models import *
 DEFAULT_USER = "John Smith"
 EMPTY = "".encode()
 NO_BOARDS = {"boards" : {}}
+SUCCESS = {"complete" : True}
+FAILURE = {"complete" : False}
 
 '''
 ================================================================
@@ -75,21 +77,9 @@ def home(userID):
 
     return render_template("homeView.html", userID = userID, name = artistName)
 
-@app.route("/myboards/<userID>")
-def myboards(userID):
-    return render_template("myboards.html")
-
-@app.route("/join/<userID>")
-def join(userID):
-    return render_template("join.html")
-
-@app.route("/create/<userID>")
-def create(userID):
-    return render_template("create.html")
-
 @app.route("/board/<userID>/<boardID>")
 def board(userID, boardID):
-    return render_template("board.html", boardname = "DefaultBoard")
+    return render_template("board.html", userID = userID, boardID = boardID)
 
 @app.route("/board")
 def boardonly():
@@ -242,6 +232,34 @@ def leaveBoard(boardID, userID):
             db.session.delete(association)
             db.session.commit()
             responseBody["refreshList"] = True
+
+    return responseBody
+
+@app.route('/saveBoard', methods=["POST"])
+def saveBoard():
+    requestData = json.loads(request.data)
+    
+    board = db.session.query(Board).filter(Board.board_id == requestData["boardID"]).first()
+    if board != None:
+        boardData = requestData["boardData"]
+
+        board.boardData = boardData.encode()
+        db.session.commit()
+
+        return SUCCESS
+    else:
+        return FAILURE
+
+@app.route('/loadBoard/<boardID>', methods=["GET"])
+def loadBoard(boardID):
+    responseBody = {
+        "boardData" : None
+    }
+    
+    board = db.session.query(Board).filter(Board.board_id == boardID).first()
+    if board != None:
+        boardData = board.boardData.decode()
+        responseBody["boardData"] = boardData
 
     return responseBody
 
