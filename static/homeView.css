@@ -8,8 +8,10 @@ body, html {
 .tablink-container {
     display: flex;
     justify-content: space-between;    
+    align-items: center;
     background-color: #161717;
     padding: 10px;
+    padding-right:2rem;
     /* border-bottom: 1px solid #0e0e0e; */
     box-shadow: 10px 5px 5px #1c1b1b;
     font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -24,6 +26,7 @@ body, html {
     box-sizing: border-box;
     color: #FFFFFF;
     display: flex;
+    height: 5rem;
     font-family: 'Comic Sans MS', cursive, sans-serif;
     font-size: 20px;
     justify-content: center;
@@ -72,7 +75,7 @@ body, html {
     display: none;
     padding: 20px;
     border-top: none;
-    height: calc(100vh - 10rem);
+    height: calc(100vh - 14rem);
     font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
@@ -432,8 +435,10 @@ th {
 
 }
 
-
-
+#tabImage {
+    height:8rem;
+    width:auto;
+}
 
 
 
