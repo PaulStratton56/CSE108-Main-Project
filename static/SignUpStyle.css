@@ -1,5 +1,5 @@
 body {
-    background-color: #fff;
+    background-image: linear-gradient(144deg, #ff4040, #0d0de8 50%, #11131e);
 }
 
 .App {
@@ -15,14 +15,17 @@ body {
 
 .Logo {
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%) rotate(360deg) scale(2.5);
+    opacity: 0.5;
     width: 20rem;
     height: auto;
+    z-index: -1;
 }
 
 .container1 {
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.8);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
