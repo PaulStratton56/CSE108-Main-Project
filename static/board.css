@@ -66,7 +66,7 @@ h1 {
 
 #toolbar button:hover {
     background-image: linear-gradient(144deg, #070772 50%, #0a0b11);
-    
+
 }
 
 #toolbar-container {
@@ -78,6 +78,7 @@ h1 {
     background-color: #202020;
     overflow-x: hidden;
     transition: width 0.5s ease;
+    z-index: 0;
 }
 
 #toolbar {
@@ -97,12 +98,14 @@ h1 {
     padding: 6px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    z-index: 1;
 }
 
 #toggleToolbar:hover {
     background-image: linear-gradient(144deg, #070772 50%, #0a0b11);
 }
 
+
 .collapsed {
-    width: 40px !important; /* Adjust width for collapsed state */
+    width: 0px !important; /* Adjust width for collapsed state */
 }

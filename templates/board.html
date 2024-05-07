@@ -13,8 +13,9 @@
 
 <body onload="startup('{{userID}}', '{{boardID}}')">
     <section class="container">
+        <button id="toggleToolbar">《 </button>
         <div id="toolbar-container">
-            <button id="toggleToolbar">《 </button>
+
             <br><br>
             <div id="toolbar">
                 <!-- <h1>cse 108!!!</h1> -->
@@ -40,6 +41,13 @@
                 <div id="activeTool">Active Tool: Pen</div>
 
                 <button id="saveCanvas">Save Canvas</button>
+
+                <br><br>
+                <button id="downloadBtn">Download PNG</button>
+
+                <button id="uploadBtn">Upload Image</button>
+                <input type="file" id="hiddenUploadInput" style="display: none;">
+
                 <form action="{{ url_for('home', userID = userID )}}" method="GET">
                     <button type="submit">Back Home</button>
                 </form>

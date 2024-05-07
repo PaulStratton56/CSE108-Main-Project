@@ -7,6 +7,11 @@ const ctx = canvas.getContext('2d');
 
 const saveButton = document.getElementById('saveCanvas');
 
+const downloadBtn = document.getElementById('downloadBtn');
+
+const uploadBtn = document.getElementById('uploadBtn');
+const hiddenUploadInput = document.getElementById('hiddenUploadInput');
+
 const canvasOffsetX = canvas.offsetLeft;
 const canvasOffsetY = canvas.offsetTop;
 
@@ -18,6 +23,9 @@ let isErasing = false;
 let collapsed = false;
 let penWidth = 5;
 let eraserWidth = 5;
+
+ctx.fillStyle = 'white';
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 
 var boardID;
 var userID;
@@ -38,6 +46,8 @@ toolbar.addEventListener('click', e => {
 
     if (e.target.id === 'clear') {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
     if (e.target.classList.contains('tool')) {
@@ -123,7 +133,7 @@ canvas.addEventListener('mousemove', draw);
 const saveCanvas = () => {
     const dataURL = canvas.toDataURL(); // Get the data URL of the canvas
     console.log("Saving board...");
-    
+
     let saveCanvasRequest = new XMLHttpRequest();
     saveCanvasRequest.open("POST", "/saveBoard", true);
     saveCanvasRequest.setRequestHeader("Content-Type", "application/json");
@@ -163,8 +173,35 @@ const loadCanvas = () => {
             }
             img.src = savedData;
         }
-    }    
+    }
 
 }
 
 saveButton.addEventListener('click', saveCanvas);
+
+uploadBtn.addEventListener('click', () => {
+    hiddenUploadInput.click();
+});
+
+hiddenUploadInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+            const img = new Image();
+            img.onload = function () {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+downloadBtn.addEventListener('click', () => {
+    const link = document.createElement('a');
+    link.download = 'canvas_drawing.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+});
