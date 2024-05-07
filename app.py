@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request
 from flask_login import LoginManager, login_required, login_user, logout_user, current_user
 import json
-from models import *
+from models import Artist, Board, UserBoardAssociation, db, app
 
 DEFAULT_USER = "John Smith"
 EMPTY = "".encode()
@@ -20,9 +20,9 @@ def load_user(userID):
 
 '''
 ================================================================
-                          Page Routes                           
+                          Page Routes
 ================================================================
-'''  
+'''
 
 @app.route("/")
 def index():
@@ -31,9 +31,9 @@ def index():
 @app.route("/loginPage", methods=["GET", "POST"])
 def loginPage():
     if request.method == "GET":
-        return render_template("login.html")
+        return render_template("Login.html")
     if request.method == "POST":
-        
+
         username = request.form.get('username')
         password = request.form.get('password')
 
@@ -43,7 +43,7 @@ def loginPage():
             if artist.passwordIsValid(password) == True:
                 return redirect(url_for("login", userID = artist.id))
 
-    return render_template("login.html")
+    return render_template("Login.html")
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
@@ -73,7 +73,7 @@ def signup():
 
             else:
                 print("ERROR: " + passwordStatus)
-        
+
         else:
             print("ERROR: " + usernameStatus)
 
@@ -102,14 +102,14 @@ def board(userID, boardID):
 
 '''
 ================================================================
-                          Backend Routes                           
+                          Backend Routes
 ================================================================
-''' 
+'''
 
 @app.route('/login/<userID>')
 def login(userID):
     artist = db.session.query(Artist).filter(Artist.id == userID).first()
-    
+
     if artist != None:
         login_user(artist)
         return redirect(url_for('home', userID = userID))
@@ -130,12 +130,12 @@ def addArtistToBoard():
 
     newArtistUsername = json.loads(request.data)["username"]
     artist = db.session.query(Artist).filter(Artist.username == newArtistUsername).first()
-    
+
     if artist != None:
         response["name"] = artist.name
     else:
         response["userExists"] = False
-    
+
     return json.dumps(response)
 
 @app.route('/createBoard', methods=["POST"])
@@ -144,8 +144,8 @@ def createBoard():
     requestData = json.loads(request.data)
     boardName = requestData['name']
     boardOwner = db.session.query(Artist).filter(Artist.id == requestData['ownerID']).first()
-    
-    newBoard = Board(name = boardName, boardData = EMPTY, owner = boardOwner)  
+
+    newBoard = Board(name = boardName, boardData = EMPTY, owner = boardOwner)
     db.session.add(newBoard)
     db.session.commit()
 
@@ -156,7 +156,7 @@ def createBoard():
     collaboratorUsernames = requestData['artistUsernames']
     for username in collaboratorUsernames.values():
         collaborator = db.session.query(Artist).filter(Artist.username == username).first()
-        
+
         link = UserBoardAssociation(user = collaborator, board = newBoard)
         db.session.add(link)
         db.session.commit()
@@ -180,7 +180,7 @@ def joinBoard(userID):
 
     if artist == None or board == None:
         return redirect(url_for('home', userID = userID))
-    
+
     else:
         association = UserBoardAssociation(user = artist, board = board)
         db.session.add(association)
@@ -194,22 +194,22 @@ def myBoards(userID):
     artist = db.session.query(Artist).filter(Artist.id == userID).first()
 
     if artist != None:
-        myBoards = db.session.query(Board).join(UserBoardAssociation).filter(UserBoardAssociation.id == userID).all()
+        myBoards = db.session.query(Board).join(UserBoardAssociation).filter(UserBoardAssociation.user_id == userID).all()
 
         responseBody = {}
 
         for boardIndex,board in enumerate(myBoards):
             boardInfo = {}
-            
+
             boardInfo["name"] = board.name
-            
+
             boardInfo["boardData"] = board.boardData.decode()
 
             if board.owner == artist:
                 boardInfo["owned"] = True
             else:
                 boardInfo["owned"] = False
-            
+
             boardInfo["boardID"] = board.id
 
             collaborators = db.session.query(Artist).join(UserBoardAssociation).filter(UserBoardAssociation.board == board).all()
@@ -219,9 +219,9 @@ def myBoards(userID):
                     collaboratorInfo[collaboratorIndex] = collaborator.name
             boardInfo["collaborators"] = collaboratorInfo
 
-            responseBody[boardIndex] = boardInfo            
+            responseBody[boardIndex] = boardInfo
 
-            
+
         return responseBody
 
     else:
@@ -243,7 +243,7 @@ def deleteBoard(boardID):
         db.session.delete(board)
         db.session.commit()
         responseBody["refreshList"] = True
-    
+
     return responseBody
 
 @app.route('/leaveBoard/<boardID>/<userID>', methods=["DELETE"])
@@ -269,7 +269,7 @@ def leaveBoard(boardID, userID):
 @login_required
 def saveBoard():
     requestData = json.loads(request.data)
-    
+
     board = db.session.query(Board).filter(Board.id == requestData["boardID"]).first()
     if board != None:
         boardData = requestData["boardData"]
@@ -287,7 +287,7 @@ def loadBoard(boardID):
     responseBody = {
         "boardData" : None
     }
-    
+
     board = db.session.query(Board).filter(Board.id == boardID).first()
     if board != None:
         boardData = board.boardData.decode()
@@ -297,29 +297,29 @@ def loadBoard(boardID):
 
 @app.route('/debug')
 def debug():
-    
+
     print("Debug Complete.")
     return redirect(url_for('index'))
 
 '''
 ================================================================
-                          Other Functions                           
+                          Other Functions
 ================================================================
-''' 
+'''
 
 def userHasAccess(userID):
     pageOwner = db.session.query(Artist).filter(Artist.id == userID).first()
     if pageOwner != current_user:
         return False
     return True
-    
+
 def checkUsername(username):
     returnCode = "USERNAME_OK"
     artists = db.session.query(Artist).all()
     for artist in artists:
         if artist.username == username:
             returnCode = "USERNAME_DUPLICATE"
-    
+
     return returnCode
 
 def checkPassword(password, confirmationPassword):
